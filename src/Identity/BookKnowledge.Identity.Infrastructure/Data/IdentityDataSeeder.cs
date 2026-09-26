@@ -32,6 +32,55 @@ namespace BookKnowledge.Identity.Infrastructure.Data
                     {
                         await roleManager.CreateAsync(new IdentityRole(role));
                     }
+
+                // Ensure OpenIddict client registrations for the Blazor frontends
+                var appManager = services.GetService<OpenIddict.Abstractions.IOpenIddictApplicationManager>();
+                if (appManager != null)
+                {
+                    // BookSearch Blazor WebAssembly client
+                    var bookClientId = "booksearch.client";
+                    if (await appManager.FindByClientIdAsync(bookClientId) == null)
+                    {
+                        var descriptor = new OpenIddict.Abstractions.OpenIddictApplicationDescriptor
+                        {
+                            ClientId = bookClientId,
+                            DisplayName = "BookSearch Blazor Client",
+                        };
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Endpoints.Authorization);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Endpoints.Token);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.ResponseTypes.Code);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Scopes.Email);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Scopes.Profile);
+                        // Refresh token grant is enabled; offline_access scope is not required as a permission constant here
+                        descriptor.RedirectUris.Add(new Uri("https://localhost:52188/authentication/login-callback"));
+                        descriptor.PostLogoutRedirectUris.Add(new Uri("https://localhost:52188/authentication/logout-callback"));
+                        await appManager.CreateAsync(descriptor);
+                    }
+
+                    // ContentSearch Blazor WebAssembly client
+                    var contentClientId = "contentsearch.client";
+                    if (await appManager.FindByClientIdAsync(contentClientId) == null)
+                    {
+                        var descriptor = new OpenIddict.Abstractions.OpenIddictApplicationDescriptor
+                        {
+                            ClientId = contentClientId,
+                            DisplayName = "ContentSearch Blazor Client",
+                        };
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Endpoints.Authorization);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Endpoints.Token);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.ResponseTypes.Code);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Scopes.Email);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Scopes.Profile);
+                        // Refresh token grant is enabled; offline_access scope is not required as a permission constant here
+                        descriptor.RedirectUris.Add(new Uri("https://localhost:52186/authentication/login-callback"));
+                        descriptor.PostLogoutRedirectUris.Add(new Uri("https://localhost:52186/authentication/logout-callback"));
+                        await appManager.CreateAsync(descriptor);
+                    }
+                }
                 }
 
                 // Ensure an admin user exists for local development
