@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+      <ItemGroup>
+        <ProjectReference Include="../BookKnowledge.Books.Application/BookKnowledge.Books.Application.csproj" />
+        <ProjectReference Include="../BookKnowledge.Books.Infrastructure/BookKnowledge.Books.Infrastructure.csproj" />
+        <ProjectReference Include="../../ServiceDefaults/BookKnowledge.ServiceDefaults/BookKnowledge.ServiceDefaults.csproj" />
+      </ItemGroup>
+      <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+        <PackageReference Include="Swashbuckle.AspNetCore" />
+      </ItemGroup>
+    </Project>

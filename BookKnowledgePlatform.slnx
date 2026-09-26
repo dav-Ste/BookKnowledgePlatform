@@ -1,0 +1,41 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AppHost/BookKnowledge.AppHost/BookKnowledge.AppHost.csproj" />
+  </Folder>
+  <Folder Name="/src/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/BookKnowledge.BuildingBlocks/BookKnowledge.BuildingBlocks.csproj" />
+  </Folder>
+  <Folder Name="/src/Common/">
+    <Project Path="src/BuildingBlocks/BookKnowledge.Contracts/BookKnowledge.Contracts.csproj" />
+    <Project Path="src/Gateway/BookKnowledge.Gateway/BookKnowledge.Gateway.csproj" />
+    <Project Path="src/Indexing/BookKnowledge.Indexing.Worker/BookKnowledge.Indexing.Worker.csproj" />
+    <Project Path="src/ServiceDefaults/BookKnowledge.ServiceDefaults/BookKnowledge.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/Auth/">
+    <Project Path="src/Identity/BookKnowledge.Identity.Api/BookKnowledge.Identity.Api.csproj" />
+    <Project Path="src/Identity/BookKnowledge.Identity.Application/BookKnowledge.Identity.Application.csproj" />
+    <Project Path="src/Identity/BookKnowledge.Identity.Domain/BookKnowledge.Identity.Domain.csproj" />
+    <Project Path="src/Identity/BookKnowledge.Identity.Infrastructure/BookKnowledge.Identity.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Books/">
+    <Project Path="src/Books/BookKnowledge.Books.Api/BookKnowledge.Books.Api.csproj" />
+    <Project Path="src/Books/BookKnowledge.Books.Application/BookKnowledge.Books.Application.csproj" />
+    <Project Path="src/Books/BookKnowledge.Books.Domain/BookKnowledge.Books.Domain.csproj" />
+    <Project Path="src/Books/BookKnowledge.Books.Infrastructure/BookKnowledge.Books.Infrastructure.csproj" />
+    <Project Path="src/Frontend/BookKnowledge.BookSearch.Web/BookKnowledge.BookSearch.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/ContentSearch/">
+    <Project Path="src/ContentSearch/BookKnowledge.ContentSearch.Api/BookKnowledge.ContentSearch.Api.csproj" />
+    <Project Path="src/ContentSearch/BookKnowledge.ContentSearch.Application/BookKnowledge.ContentSearch.Application.csproj" />
+    <Project Path="src/ContentSearch/BookKnowledge.ContentSearch.Domain/BookKnowledge.ContentSearch.Domain.csproj" />
+    <Project Path="src/ContentSearch/BookKnowledge.ContentSearch.Infrastructure/BookKnowledge.ContentSearch.Infrastructure.csproj" />
+    <Project Path="src/Frontend/BookKnowledge.ContentSearch.Web/BookKnowledge.ContentSearch.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BookKnowledge.Architecture.Tests/BookKnowledge.Architecture.Tests.csproj" />
+    <Project Path="tests/BookKnowledge.Books.IntegrationTests/BookKnowledge.Books.IntegrationTests.csproj" />
+    <Project Path="tests/BookKnowledge.BuildingBlocks.Tests/BookKnowledge.BuildingBlocks.Tests.csproj" />
+    <Project Path="tests/BookKnowledge.Gateway.IntegrationTests/BookKnowledge.Gateway.IntegrationTests.csproj" />
+  </Folder>
+</Solution>

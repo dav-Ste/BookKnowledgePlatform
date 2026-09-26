@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="Aspire.AppHost.Sdk" Version="13.5.3" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Gateway/BookKnowledge.Gateway/BookKnowledge.Gateway.csproj" />
+    <ProjectReference Include="../../Identity/BookKnowledge.Identity.Api/BookKnowledge.Identity.Api.csproj" />
+    <ProjectReference Include="../../Books/BookKnowledge.Books.Api/BookKnowledge.Books.Api.csproj" />
+    <ProjectReference Include="../../ContentSearch/BookKnowledge.ContentSearch.Api/BookKnowledge.ContentSearch.Api.csproj" />
+    <ProjectReference Include="../../Indexing/BookKnowledge.Indexing.Worker/BookKnowledge.Indexing.Worker.csproj" />
+    <ProjectReference Include="../../Frontend/BookKnowledge.BookSearch.Web/BookKnowledge.BookSearch.Web.csproj" />
+    <ProjectReference Include="../../Frontend/BookKnowledge.ContentSearch.Web/BookKnowledge.ContentSearch.Web.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
+    <PackageReference Include="Aspire.Hosting.Qdrant" />
+  </ItemGroup>
+</Project>

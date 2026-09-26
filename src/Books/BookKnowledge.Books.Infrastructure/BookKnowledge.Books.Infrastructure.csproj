@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup><ProjectReference Include="../BookKnowledge.Books.Application/BookKnowledge.Books.Application.csproj" /></ItemGroup>
+  <ItemGroup><ProjectReference Include="../../BuildingBlocks/BookKnowledge.BuildingBlocks/BookKnowledge.BuildingBlocks.csproj" /></ItemGroup>
+</Project>

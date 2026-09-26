@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+  <ItemGroup>
+    <ProjectReference Include="../../BuildingBlocks/BookKnowledge.Contracts/BookKnowledge.Contracts.csproj" />
+    <ProjectReference Include="../../ServiceDefaults/BookKnowledge.ServiceDefaults/BookKnowledge.ServiceDefaults.csproj" />
+  </ItemGroup>
+</Project>
