@@ -9,6 +9,28 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
+// Configure cookie policy and secure cookie defaults (HTTPS only, HttpOnly, SameSite handling)
+builder.Services.Configure<Microsoft.AspNetCore.Builder.CookiePolicyOptions>(options =>
+{
+    options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+    options.OnAppendCookie = cookieContext =>
+    {
+        cookieContext.CookieOptions.Secure = true;
+        cookieContext.CookieOptions.HttpOnly = true;
+        var name = cookieContext.CookieName ?? string.Empty;
+        if (name.Contains("correlation", StringComparison.OrdinalIgnoreCase))
+            cookieContext.CookieOptions.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+        else if (name.Equals("PAX", StringComparison.OrdinalIgnoreCase) || name.Equals("JAX", StringComparison.OrdinalIgnoreCase))
+            cookieContext.CookieOptions.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
+        else
+            cookieContext.CookieOptions.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+    };
+    options.OnDeleteCookie = cookieContext =>
+    {
+        cookieContext.CookieOptions.Secure = true;
+        cookieContext.CookieOptions.HttpOnly = true;
+    };
+});
 builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 
@@ -20,6 +42,16 @@ builder.Services.AddDbContext<IdentityDbContext>(options =>
     // Register the OpenIddict entity sets in the EF Core model
     options.UseOpenIddict();
 });
+
+// Configure application cookie defaults for Identity
+builder.Services.Configure<Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions>(
+    Microsoft.AspNetCore.Identity.IdentityConstants.ApplicationScheme,
+    options =>
+    {
+        options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+    });
 
 // Configure ASP.NET Core Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -83,8 +115,37 @@ using (var scope = app.Services.CreateScope())
 app.UseExceptionHandler();
 app.UseRateLimiter();
 app.UseHttpsRedirection();
+app.UseCookiePolicy();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapDefaultEndpoints();
+
+// Test-only endpoint to set cookies for integration tests (only available in Development)
+if (app.Environment.IsDevelopment())
+{
+    app.MapGet("/test/setcookies", (HttpContext http) =>
+    {
+        // Append a correlation cookie (should be SameSite=None per cookie policy)
+        http.Response.Cookies.Append("correlation_test", "v1", new Microsoft.AspNetCore.Http.CookieOptions
+        {
+            Path = "/",
+        });
+
+        // Append PAX and JAX cookies (sensitive)
+        http.Response.Cookies.Append("PAX", "pax", new Microsoft.AspNetCore.Http.CookieOptions
+        {
+            Path = "/",
+        });
+
+        http.Response.Cookies.Append("JAX", "jax", new Microsoft.AspNetCore.Http.CookieOptions
+        {
+            Path = "/",
+        });
+
+        return Results.Ok(new { ok = true });
+    });
+}
 
 app.MapGet("/healthz", () => Results.Ok(new { service = "Identity", status = "ok" }))
    .RequireRateLimiting("api");

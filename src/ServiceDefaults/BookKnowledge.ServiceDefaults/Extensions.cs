@@ -68,6 +68,8 @@ public static class Extensions
         return builder;
     }
 
+    // Cookie policy configuration moved into individual web application startup files to avoid package reference in shared project.
+
     public static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
         app.MapHealthChecks("/health");
