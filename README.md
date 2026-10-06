@@ -37,6 +37,15 @@ From the repository root:
 
 Open the Aspire dashboard URL shown by the CLI.
 
+## Authentication and gateway notes
+
+See docs/0002-authentication-and-authorisation.md for the architecture decisions.
+
+Additional docs created by the ongoing identity work:
+- docs/gateway-configuration.md — example appsettings and YARP route-level policy mapping for the gateway.
+- docs/secrets-management.md — guidance on rotating the gateway client secret and using secret stores.
+- docs/login-flow.md — end-to-end login flow, token propagation and troubleshooting tips.
+
 ## Run infrastructure only
 
     docker compose -f docker-compose.infrastructure.yml up -d

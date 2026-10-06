@@ -3,14 +3,16 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "LocalOnly!ChangeMe123"
+      # Allow overriding the SA password via environment variable. Default is for local development only.
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-LocalOnly!ChangeMe123}"
     ports:
       - "1433:1433"
     volumes:
       - sql-data:/var/opt/mssql
 
   rabbitmq:
-    image: rabbitmq:4-management
+    # Image can be overridden via RABBITMQ_IMAGE env var (example: rabbitmq:3.11-management)
+    image: "${RABBITMQ_IMAGE:-rabbitmq:3.11-management}"
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -18,7 +20,8 @@ services:
       - rabbit-data:/var/lib/rabbitmq
 
   qdrant:
-    image: qdrant/qdrant:latest
+    # Image can be overridden via QDRANT_IMAGE env var (example: qdrant/qdrant:v1.2.0)
+    image: "${QDRANT_IMAGE:-qdrant/qdrant:latest}"
     ports:
       - "6333:6333"
       - "6334:6334"
@@ -26,11 +29,13 @@ services:
       - qdrant-data:/qdrant/storage
 
   minio:
-    image: minio/minio:latest
+    # Image can be overridden via MINIO_IMAGE env var (example: minio/minio:latest)
+    image: "${MINIO_IMAGE:-minio/minio:latest}"
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: localadmin
-      MINIO_ROOT_PASSWORD: LocalOnly!ChangeMe123
+      # Allow overriding the MinIO root password from environment
+      MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD:-LocalOnly!ChangeMe123}"
     ports:
       - "9000:9000"
       - "9001:9001"

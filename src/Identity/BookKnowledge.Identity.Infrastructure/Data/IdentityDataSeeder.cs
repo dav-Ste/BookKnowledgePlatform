@@ -35,6 +35,8 @@ namespace BookKnowledge.Identity.Infrastructure.Data
 
                 // Ensure OpenIddict client registrations for the Blazor frontends
                 var appManager = services.GetService<OpenIddict.Abstractions.IOpenIddictApplicationManager>();
+                var env = services.GetService<Microsoft.Extensions.Hosting.IHostEnvironment>();
+                var isProduction = string.Equals(env?.EnvironmentName, "Production", StringComparison.OrdinalIgnoreCase);
                 if (appManager != null)
                 {
                     // BookSearch Blazor WebAssembly client
@@ -78,6 +80,40 @@ namespace BookKnowledge.Identity.Infrastructure.Data
                         // Refresh token grant is enabled; offline_access scope is not required as a permission constant here
                         descriptor.RedirectUris.Add(new Uri("https://localhost:52186/authentication/login-callback"));
                         descriptor.PostLogoutRedirectUris.Add(new Uri("https://localhost:52186/authentication/logout-callback"));
+                        await appManager.CreateAsync(descriptor);
+                    }
+                    // Gateway server-side client (confidential)
+                    var gatewayClientId = "gateway.client";
+                    if (await appManager.FindByClientIdAsync(gatewayClientId) == null)
+                    {
+                        // Read a gateway client secret from configuration (supports Azure Key Vault via config provider)
+                        var configuration = services.GetService<Microsoft.Extensions.Configuration.IConfiguration>();
+                        var gatewaySecret = configuration != null
+                            ? configuration["Authentication:Gateway:ClientSecret"] ?? configuration["GATEWAY_CLIENT_SECRET"]
+                            : null;
+
+                            if (string.IsNullOrEmpty(gatewaySecret))
+                            {
+                                // Fallback for local development only
+                                gatewaySecret = "gateway-secret";
+                                // Use LoggerMessage pattern for high-performance logging
+                                LoggerMessage.Define(LogLevel.Warning, new EventId(1001, "DevSecret"), "Using development gateway client secret. Replace with a secret store in production.")
+                                    (logger, null);
+                            }
+
+                        var descriptor = new OpenIddict.Abstractions.OpenIddictApplicationDescriptor
+                        {
+                            ClientId = gatewayClientId,
+                            DisplayName = "Gateway Server Client",
+                            ClientSecret = gatewaySecret
+                        };
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Endpoints.Authorization);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.Endpoints.Token);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
+                        descriptor.Permissions.Add(OpenIddict.Abstractions.OpenIddictConstants.Permissions.ResponseTypes.Code);
+                        descriptor.RedirectUris.Add(new Uri("https://localhost:52192/signin-oidc"));
+                        descriptor.PostLogoutRedirectUris.Add(new Uri("https://localhost:52192/signout-callback-oidc"));
                         await appManager.CreateAsync(descriptor);
                     }
                 }

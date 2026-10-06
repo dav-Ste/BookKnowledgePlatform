@@ -7,7 +7,6 @@
   </Folder>
   <Folder Name="/src/Common/">
     <Project Path="src/BuildingBlocks/BookKnowledge.Contracts/BookKnowledge.Contracts.csproj" />
-    <Project Path="src/Gateway/BookKnowledge.Gateway/BookKnowledge.Gateway.csproj" />
     <Project Path="src/Indexing/BookKnowledge.Indexing.Worker/BookKnowledge.Indexing.Worker.csproj" />
     <Project Path="src/ServiceDefaults/BookKnowledge.ServiceDefaults/BookKnowledge.ServiceDefaults.csproj" />
   </Folder>
@@ -31,6 +30,9 @@
     <Project Path="src/ContentSearch/BookKnowledge.ContentSearch.Domain/BookKnowledge.ContentSearch.Domain.csproj" />
     <Project Path="src/ContentSearch/BookKnowledge.ContentSearch.Infrastructure/BookKnowledge.ContentSearch.Infrastructure.csproj" />
     <Project Path="src/Frontend/BookKnowledge.ContentSearch.Web/BookKnowledge.ContentSearch.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Gateway/">
+    <Project Path="src/Gateway/BookKnowledge.Gateway/BookKnowledge.Gateway.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/BookKnowledge.Architecture.Tests/BookKnowledge.Architecture.Tests.csproj" />
